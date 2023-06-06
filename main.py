@@ -1,5 +1,12 @@
 from flask import Flask, render_template, request
 from json import load
+
+def try_creds(users, name, password):
+    if name in users.keys():
+        if users[name] == password:
+            return True
+    return False
+
 if __name__ == '__main__':
     users = dict()
 
@@ -19,12 +26,8 @@ if __name__ == '__main__':
         if request.method == 'POST':
             username = request.form.get('username').strip()
             password = request.form.get('password').strip()
-            print("Lol")
-            if username in users.keys():
-                print("Kek")
-                if users[username] == password:
-                    print("Cheburek")
-                    return render_template('index.html', ans="Access granted")
+            if try_creds(users, username, password):
+                return render_template('index.html', ans="Access granted")
         return render_template('index.html', ans="Access denied")
 
 
